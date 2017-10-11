@@ -68,3 +68,22 @@ RUN for i in /usr/local/gdal/bin/*; \
     do \
       ln -s $i /usr/local/bin/$(basename $i);\
     done
+
+# ======================================================================
+# Build the gdal/node image
+# ======================================================================
+FROM area51/${ARCH}-node as node
+LABEL maintainer="Peter Mount <peter@retep.org>"
+
+# Additional tools
+RUN apk add --no-cache \
+      imagemagick
+
+# Install gdal
+COPY --from=compile /usr/local/gdal /usr/local/gdal/
+
+# symlink binaries into /usr/local/bin
+RUN for i in /usr/local/gdal/bin/*; \
+    do \
+      ln -s $i /usr/local/bin/$(basename $i);\
+    done
