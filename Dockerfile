@@ -49,6 +49,8 @@ RUN cd /tmp/gdal-src &&\
 RUN cd /tmp/gdal-src &&\
     make install
 
+RUN apk add --no-cache python-dev
+
 RUN cd /tmp/gdal-src/swig/python &&\
     python setup.py build
 
