@@ -44,21 +44,10 @@ RUN cd /tmp/gdal-src &&\
     ./configure --prefix=/usr/local/gdal
 
 RUN cd /tmp/gdal-src &&\
-    make -j4
+    make
 
 RUN cd /tmp/gdal-src &&\
     make install
-
-RUN apk add --no-cache python-dev
-
-RUN cd /tmp/gdal-src/swig/python &&\
-    python setup.py build
-
-RUN cd /tmp/gdal-src/swig/python &&\
-    export packagedir=/usr/local/gdal/lib/python$(python --version 2>&1 |cut -f2 -d' ')/site-packages &&\
-    mkdir -p $packagedir &&\
-    PYTHONPATH=$packagedir setup.py install --prefix=/usr/local/gdal &&\
-    PYTHONPATH=$packagedir:$PYTHONPATH python -c "from osgeo import gdal; print(gdal.__version__)"
 
 # ======================================================================
 # Build the gdal image
@@ -69,8 +58,7 @@ LABEL maintainer="Peter Mount <peter@retep.org>"
 # Required libraries
 RUN apk add --no-cache \
       libgcc \
-      libstdc++ \
-      python
+      libstdc++
 
 # Install gdal
 COPY --from=compile /usr/local/gdal /usr/local/gdal/
