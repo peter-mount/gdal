@@ -44,7 +44,7 @@ RUN cd /tmp/gdal-src &&\
     ./configure --prefix=/usr/local/gdal
 
 RUN cd /tmp/gdal-src &&\
-    make
+    make -j4
 
 RUN cd /tmp/gdal-src &&\
     make install
