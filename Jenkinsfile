@@ -5,7 +5,7 @@ repository= 'area51/'
 imagePrefix = 'gdal'
 
 // The gdal & image version
-version=2.2.2
+version='2.2.3'
 
 // The architectures to build, in format recognised by docker
 architectures = [ 'amd64', 'arm64v8' ]
