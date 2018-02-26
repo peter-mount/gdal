@@ -65,21 +65,51 @@ architectures.each {
       sh 'docker pull area51/node:latest'
     }
 
-    stage( 'Build ' + architecture + ' ' + version ) {
+    stage( 'Configure ' + architecture ) {
       sh 'docker build' +
         ' -t ' + dockerImage( architecture, version ) +
         ' --build-arg VERSION=' + version +
+        ' --target configure'
         ' .'
     }
 
-    stage( 'Publish ' + architecture + ' ' + version ) {
+    stage( 'Make ' + architecture ) {
+      sh 'docker build' +
+        ' -t ' + dockerImage( architecture, version ) +
+        ' --build-arg VERSION=' + version +
+        ' --target make'
+        ' .'
+    }
+
+    stage( 'install ' + architecture ) {
+      sh 'docker build' +
+        ' -t ' + dockerImage( architecture, version ) +
+        ' --build-arg VERSION=' + version +
+        ' --target install'
+        ' .'
+    }
+
+    stage( 'Image ' + architecture ) {
+      sh 'docker build' +
+        ' -t ' + dockerImage( architecture, version ) +
+        ' --build-arg VERSION=' + version +
+        ' --target dist'
+        ' .'
+      sh 'docker build' +
+        ' -t ' + dockerImage( architecture, version ) +
+        ' --build-arg VERSION=' + version +
+        ' --target gdal'
+        ' .'
+    }
+
+    stage( 'Publish ' + architecture ) {
       sh 'docker push ' + dockerImage( architecture, version )
     }
   }
 }
 
 def multiarch = {
-  multiVersion -> stage( 'Publish MultiArch ' + version ) {
+  multiVersion -> stage( 'Publish multi arch' ) {
     // The manifest to publish
     multiImage = dockerImage( '', multiVersion )
 

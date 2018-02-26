@@ -20,16 +20,27 @@ RUN cd /tmp &&\
 # ======================================================================
 # Build gdal
 # ======================================================================
-FROM download as compile
+FROM download as configure
 
 RUN cd /tmp/gdal-src &&\
     ./configure --prefix=/usr/local/gdal
 
+FROM configure as make
 RUN cd /tmp/gdal-src &&\
     make
 
+FROM make as install
 RUN cd /tmp/gdal-src &&\
     make install
+
+FROM install as dist
+RUN mkdir -p /work/usr/local/bin &&\
+    cp -rp /usr/local/gdal /work/usr/local/gdal &&\
+    cd /work/user/local/bin &&\
+    for i in ../gdal/bin/*; \
+    do \
+      ln -s $i $(basename $i);\
+    done
 
 # ======================================================================
 # Build the gdal image
@@ -43,10 +54,4 @@ RUN apk add --no-cache \
       libstdc++
 
 # Install gdal
-COPY --from=compile /usr/local/gdal /usr/local/gdal/
-
-# symlink binaries into /usr/local/bin
-RUN for i in /usr/local/gdal/bin/*; \
-    do \
-      ln -s $i /usr/local/bin/$(basename $i);\
-    done
+COPY --from=dist /work/usr/local /usr/local/
