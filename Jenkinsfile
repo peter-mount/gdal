@@ -66,7 +66,7 @@ def buildGdal = {
       sh 'docker build' +
         ' -t ' + dockerImage( architecture, version ) +
         ' --build-arg VERSION=' + version +
-        ' --target configure'
+        ' --target configure' +
         ' .'
     }
 
