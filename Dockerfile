@@ -36,7 +36,7 @@ RUN cd /tmp/gdal-src &&\
 FROM install as dist
 RUN mkdir -p /work/usr/local/bin &&\
     cp -rp /usr/local/gdal /work/usr/local/gdal &&\
-    cd /work/user/local/bin &&\
+    cd /work/usr/local/bin &&\
     for i in ../gdal/bin/*; \
     do \
       ln -s $i $(basename $i);\
