@@ -54,13 +54,10 @@ properties( [
   ])
 ])
 
-architectures.each {
+def buildGdal = {
   architecture -> node( slaveId( architecture ) ) {
     stage( "Checkout " + architecture ) {
       checkout scm
-    }
-
-    stage( 'Prepare ' + architecture + ' ' + version ) {
       sh 'docker pull alpine:latest'
       sh 'docker pull area51/node:latest'
     }
@@ -130,6 +127,15 @@ def multiarch = {
     sh 'docker manifest push -p ' + multiImage
   }
 }
+
+parallel(
+  'amd64': {
+    buildGdal( 'amd64' )
+  },
+  'arm64v8': {
+    buildGdal( 'arm64v8' )
+  }
+)
 
 node( "AMD64" ) {
   multiarch( version )
