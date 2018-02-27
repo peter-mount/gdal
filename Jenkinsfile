@@ -77,7 +77,7 @@ architectures.each {
       sh 'docker build' +
         ' -t ' + dockerImage( architecture, version ) +
         ' --build-arg VERSION=' + version +
-        ' --target make'
+        ' --target make' +
         ' .'
     }
 
@@ -85,7 +85,7 @@ architectures.each {
       sh 'docker build' +
         ' -t ' + dockerImage( architecture, version ) +
         ' --build-arg VERSION=' + version +
-        ' --target install'
+        ' --target install' +
         ' .'
     }
 
@@ -93,12 +93,12 @@ architectures.each {
       sh 'docker build' +
         ' -t ' + dockerImage( architecture, version ) +
         ' --build-arg VERSION=' + version +
-        ' --target dist'
+        ' --target dist' +
         ' .'
       sh 'docker build' +
         ' -t ' + dockerImage( architecture, version ) +
         ' --build-arg VERSION=' + version +
-        ' --target gdal'
+        ' --target gdal' +
         ' .'
     }
 
