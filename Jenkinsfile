@@ -63,7 +63,7 @@ def buildGdal = {
     }
 
     [ 'configure', 'make', 'install', 'dist', 'gdal' ].each {
-      target -> stage( taget + architecture ) {
+      target -> stage( target + architecture ) {
         sh 'docker build' +
           ' -t ' + dockerImage( architecture, version ) +
           ' --build-arg VERSION=' + version +
