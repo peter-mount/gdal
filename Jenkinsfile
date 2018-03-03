@@ -62,41 +62,14 @@ def buildGdal = {
       sh 'docker pull area51/node:latest'
     }
 
-    stage( 'Configure ' + architecture ) {
-      sh 'docker build' +
-        ' -t ' + dockerImage( architecture, version ) +
-        ' --build-arg VERSION=' + version +
-        ' --target configure' +
-        ' .'
-    }
-
-    stage( 'Make ' + architecture ) {
-      sh 'docker build' +
-        ' -t ' + dockerImage( architecture, version ) +
-        ' --build-arg VERSION=' + version +
-        ' --target make' +
-        ' .'
-    }
-
-    stage( 'install ' + architecture ) {
-      sh 'docker build' +
-        ' -t ' + dockerImage( architecture, version ) +
-        ' --build-arg VERSION=' + version +
-        ' --target install' +
-        ' .'
-    }
-
-    stage( 'Image ' + architecture ) {
-      sh 'docker build' +
-        ' -t ' + dockerImage( architecture, version ) +
-        ' --build-arg VERSION=' + version +
-        ' --target dist' +
-        ' .'
-      sh 'docker build' +
-        ' -t ' + dockerImage( architecture, version ) +
-        ' --build-arg VERSION=' + version +
-        ' --target gdal' +
-        ' .'
+    [ 'configure', 'make', 'install', 'dist', 'gdal' ].each {
+      target -> stage( taget + architecture ) {
+        sh 'docker build' +
+          ' -t ' + dockerImage( architecture, version ) +
+          ' --build-arg VERSION=' + version +
+          ' --target ' + target +
+          ' .'
+      }
     }
 
     stage( 'Publish ' + architecture ) {
