@@ -61,10 +61,9 @@ def buildGdal = {
       sh 'docker pull debian:9'
     }
 
-    stage( target + architecture ) {
+    stage( 'Build' ) {
       sh 'docker build' +
         ' -t ' + dockerImage( architecture, version ) +
-        ' --build-arg VERSION=' + version +
         ' .'
     }
 
