@@ -58,8 +58,7 @@ def buildGdal = {
   architecture -> node( slaveId( architecture ) ) {
     stage( "Checkout " + architecture ) {
       checkout scm
-      sh 'docker pull alpine:latest'
-      sh 'docker pull area51/node:latest'
+      sh 'docker pull debian:9'
     }
 
     [ 'configure', 'make', 'install', 'dist', 'gdal' ].each {
